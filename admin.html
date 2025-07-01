@@ -171,5 +171,58 @@ window.onload = function () {
       document.getElementById("promoStatus").innerText = "Promotion saved!";
     }
   </script>
+  <script>
+function loadDiscountManager() {
+  const container = document.getElementById("discountManager");
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+
+  if (!products.length) {
+    container.innerHTML = "<p>No products uploaded yet.</p>";
+    return;
+  }
+
+  container.innerHTML = products.map((prod, index) => `
+    <div style="border:1px solid #ccc; padding:10px; margin-bottom:15px;">
+      <img src="${prod.image}" style="width: 100px; height: 100px;"><br>
+      <strong>${prod.name}</strong><br>
+      <label>Original Price: ₵<input type="number" id="orig_${index}" value="${prod.originalPrice || prod.price}" /></label><br>
+      <label>New Price: ₵<input type="number" id="disc_${index}" value="${prod.price}" /></label><br>
+      <button onclick="applyDiscount(${index})">Apply Discount</button>
+      <button onclick="removeDiscount(${index})">Remove Discount</button>
+    </div>
+  `).join("");
+}
+
+function applyDiscount(index) {
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+  const newPrice = parseFloat(document.getElementById(`disc_${index}`).value);
+  const origPrice = parseFloat(document.getElementById(`orig_${index}`).value);
+
+  if (!products[index]) return;
+
+  products[index].price = newPrice;
+  products[index].originalPrice = origPrice;
+  products[index].discountApplied = true;
+
+  localStorage.setItem("uploadedProducts", JSON.stringify(products));
+  alert("Discount applied!");
+  loadDiscountManager();
+}
+
+function removeDiscount(index) {
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+
+  if (!products[index]) return;
+
+  products[index].price = products[index].originalPrice || products[index].price;
+  delete products[index].originalPrice;
+  delete products[index].discountApplied;
+
+  localStorage.setItem("uploadedProducts", JSON.stringify(products));
+  alert("Discount removed.");
+  loadDiscountManager();
+}
+</script>
+
 </body>
 </html>
