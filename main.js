@@ -102,3 +102,18 @@ window.onload = () => {
   updateCartCount();
   setupThemeToggle();
 };
+// Sidebar toggle
+const sidebarToggle = document.getElementById("sidebarToggle");
+const sidebar = document.getElementById("sidebar");
+
+if (sidebarToggle) {
+  sidebarToggle.onclick = () => {
+    sidebar.classList.toggle("show");
+  };
+}
+
+// Show admin link if logged in
+if (localStorage.getItem("admin") === "true") {
+  const adminLink = document.getElementById("adminLink");
+  if (adminLink) adminLink.style.display = "block";
+}
