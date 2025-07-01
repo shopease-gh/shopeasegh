@@ -125,4 +125,21 @@ window.onload = () => {
   getUniqueCategories();
   updateCartCount();
   setupThemeToggle();
+  function setupThemeToggle() {
+  const toggleBtn = document.getElementById("themeToggle");
+  const icon = document.getElementById("themeIcon");
+
+  const dark = localStorage.getItem("darkMode") === "true";
+  document.body.classList.toggle("dark", dark);
+  if (icon) icon.innerText = dark ? "🌙" : "🌞";
+
+  if (toggleBtn) {
+    toggleBtn.onclick = () => {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("darkMode", isDark);
+      if (icon) icon.innerText = isDark ? "🌙" : "🌞";
+    };
+  }
+}
+
 };
