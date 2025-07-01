@@ -1,77 +1,43 @@
-<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ShopEase | Beauty. Tech. You.</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ShopEase - Home</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app-container">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <h1 class="logo">SE</h1>
-      <nav>
-        <a href="index.html">Home</a>
-        <a href="cart.html">Cart 🛒</a>
-        <a href="wishlist.html">Wishlist ❤️</a>
-        <a href="inbox.html">Inbox 📩</a>
-        <a href="admin.html" id="adminLink" style="display: none;">Admin</a>
-        <a href="#" id="loginToggle">Login</a>
-      </nav>
-    </aside>
+  <header>
+    <div class="logo">SE</div>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="cart.html">Cart 🛒 (<span id="cartCount">0</span>)</a>
+      <a href="wishlist.html">Wishlist ❤️</a>
+      <a href="inbox.html">Inbox 📩</a>
+      <a href="login.html">Login</a>
+    </nav>
+    <button id="themeToggle"><span id="themeIcon">🌞</span></button>
+  </header>
 
-    <!-- Main Content -->
-    <main class="main-content">
-      <!-- Top Filters -->
-      <div class="topbar">
-        <select id="categoryFilter">
-          <option value="All">All Categories</option>
-        </select>
-        <input type="number" id="priceFilter" placeholder="Max Price (GHS)" />
-        <button onclick="applyFilters()">Filter</button>
-        <div class="theme-toggle">
-          <label>🌞</label>
-          <input type="checkbox" id="themeSwitch" />
-          <label>🌙</label>
-        </div>
-      </div>
+  <main>
+    <h1>ShopEase Products</h1>
 
-      <!-- Products Area -->
-      <section id="productList" class="product-grid">
-        <!-- Products inserted dynamically -->
-      </section>
-    </main>
-  </div>
-  <div class="topbar">
-  <span>Welcome to ShopEase!</span>
-  <div>
-    <span id="userGreeting"></span>
-    <a href="login.html" id="loginBtn">Login</a>
-    <a href="register.html" id="registerBtn">Register</a>
-    <a href="#" id="logoutBtn" style="display: none;">Logout</a>
-  </div>
-</div>
+    <div class="filters">
+      <label>Category:</label>
+      <select id="categoryFilter">
+        <option value="all">All</option>
+      </select>
 
-<script>
-  const user = JSON.parse(localStorage.getItem("loggedInUser"));
-  if (user) {
-    document.getElementById("userGreeting").textContent = `Hi, ${user.name}!`;
-    document.getElementById("loginBtn").style.display = "none";
-    document.getElementById("registerBtn").style.display = "none";
-    document.getElementById("logoutBtn").style.display = "inline";
-  }
+      <label>Max Price (GHS):</label>
+      <input type="number" id="priceFilter" placeholder="e.g. 100" />
+      <button onclick="applyFilters()">Filter</button>
+    </div>
 
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("loggedInUser");
-    window.location.reload();
-  });
-</script>
-
+    <div id="productList" class="product-grid"></div>
+  </main>
 
   <footer>
-    <p>&copy; 2025 ShopEase — Beauty. Tech. You.</p>
+    <p>© 2025 ShopEase — Beauty. Tech. You.</p>
   </footer>
 
   <script src="main.js"></script>
