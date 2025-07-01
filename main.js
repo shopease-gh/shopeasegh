@@ -1,154 +1,128 @@
-// Theme Toggle
-document.addEventListener("DOMContentLoaded", () => {
-  const themeSwitch = document.getElementById("themeSwitch");
-  const currentTheme = localStorage.getItem("theme") || "dark";
-  document.body.classList.toggle("light", currentTheme === "light");
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
+let products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
 
-  if (themeSwitch) {
-    themeSwitch.checked = currentTheme === "light";
-    themeSwitch.addEventListener("change", () => {
-      const newTheme = themeSwitch.checked ? "light" : "dark";
-      document.body.classList.toggle("light", themeSwitch.checked);
-      localStorage.setItem("theme", newTheme);
-    });
-  }
-
-  loadProducts();
-  updateCartIcon();
-  toggleAdminLink();
-  populateCategories();
-});
-
-// Sample Products (initial preload)
-const sampleProducts = [
-  {
-    id: 1,
-    name: "Silk Hair Scrunchie",
-    category: "Hair Accessories",
-    price: 30,
-    image: "https://via.placeholder.com/200x160.png?text=Hair+Scrunchie"
-  },
-  {
-    id: 2,
-    name: "Bluetooth Speaker",
-    category: "Electronics",
-    price: 180,
-    image: "https://via.placeholder.com/200x160.png?text=Speaker"
-  },
-  {
-    id: 3,
-    name: "Matte Lipstick",
-    category: "Makeup",
-    price: 50,
-    image: "https://via.placeholder.com/200x160.png?text=Lipstick"
-  },
-  {
-    id: 4,
-    name: "Facial Cleanser",
-    category: "Skin Care",
-    price: 40,
-    image: "https://via.placeholder.com/200x160.png?text=Cleanser"
-  }
-];
-
-// Load + Render Products
-function loadProducts() {
-  let products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
-  if (products.length === 0) {
-    products = sampleProducts;
-    localStorage.setItem("uploadedProducts", JSON.stringify(products));
-  }
-
-  const container = document.getElementById("productList");
-  if (!container) return;
-
-  container.innerHTML = products.map(p => `
-    <div class="product-card">
-      <img src="${p.image}" alt="${p.name}" />
-      <h3>${p.name}</h3>
-      <p>₵${p.price}</p>
-      <button onclick="addToCart(${p.id})">Add to Cart</button>
-      <button onclick="addToWishlist(${p.id})">❤️ Wishlist</button>
-    </div>
-  `).join("");
+// Sample fallback if no products yet
+if (!products.length) {
+  products = [
+    {
+      id: 1,
+      name: "Bluetooth Speaker",
+      price: 180,
+      category: "Electronics",
+      image: "https://via.placeholder.com/150"
+    },
+    {
+      id: 2,
+      name: "Matte Lipstick",
+      price: 50,
+      category: "Makeup",
+      image: "https://via.placeholder.com/150"
+    },
+    {
+      id: 3,
+      name: "Facial Cleanser",
+      price: 40,
+      category: "Skin Care",
+      image: "https://via.placeholder.com/150"
+    },
+    {
+      id: 4,
+      name: "Silk Hair Scrunchie",
+      price: 30,
+      category: "Hair Accessories",
+      image: "https://via.placeholder.com/150"
+    }
+  ];
 }
 
-// Add to Cart
+function renderProducts(items = products) {
+  const container = document.getElementById("productList");
+  if (!container) return;
+  container.innerHTML = "";
+  items.forEach(product => {
+    const card = document.createElement("div");
+    card.className = "product-card";
+    card.innerHTML = `
+      <img src="${product.image}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>₵${product.price}</p>
+      <button onclick="addToCart(${product.id})">Add to Cart</button>
+      <button onclick="addToWishlist(${product.id})">❤️ Wishlist</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
 function addToCart(id) {
-  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
   const product = products.find(p => p.id === id);
   if (product) {
     cart.push(product);
     localStorage.setItem("cart", JSON.stringify(cart));
-    updateCartIcon();
-    alert("Added to cart!");
+    updateCartCount();
   }
 }
 
-// Wishlist
 function addToWishlist(id) {
-  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
   const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
   const product = products.find(p => p.id === id);
-  if (product) {
+  if (product && !wishlist.find(p => p.id === id)) {
     wishlist.push(product);
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
-    alert("Added to wishlist!");
   }
 }
 
-// Cart Count
-function updateCartIcon() {
-  const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-  const cartLinks = document.querySelectorAll("a[href='cart.html']");
-  cartLinks.forEach(link => {
-    link.innerHTML = `Cart 🛒 (${cart.length})`;
-  });
+function updateCartCount() {
+  const count = cart.length;
+  const el = document.getElementById("cartCount");
+  if (el) el.innerText = count;
 }
 
-// Admin Link Visibility
-function toggleAdminLink() {
-  const adminLink = document.getElementById("adminLink");
-  const isAdminLoggedIn = localStorage.getItem("adminLoggedIn") === "true";
-  if (adminLink) {
-    adminLink.style.display = isAdminLoggedIn ? "block" : "none";
-  }
-}
-
-// Filter Logic
 function applyFilters() {
   const category = document.getElementById("categoryFilter").value;
   const maxPrice = parseFloat(document.getElementById("maxPriceFilter").value);
+
   const filtered = products.filter(product => {
-    const matchCategory = category === "All" || product.category === category;
-    const matchPrice = isNaN(maxPrice) || parseFloat(product.price) <= maxPrice;
-    return matchCategory && matchPrice;
+    const categoryMatch = category === "All" || product.category === category;
+    const priceMatch = isNaN(maxPrice) || parseFloat(product.price) <= maxPrice;
+    return categoryMatch && priceMatch;
   });
+
   renderProducts(filtered);
 }
 
-
-  const container = document.getElementById("productList");
-  if (!container) return;
-  container.innerHTML = filtered.length > 0 ? filtered.map(p => `
-    <div class="product-card">
-      <img src="${p.image}" alt="${p.name}" />
-      <h3>${p.name}</h3>
-      <p>₵${p.price}</p>
-      <button onclick="addToCart(${p.id})">Add to Cart</button>
-      <button onclick="addToWishlist(${p.id})">❤️ Wishlist</button>
-    </div>
-  `).join("") : "<p>No matching products found.</p>";
-}
-
-// Populate Filter Categories
-function populateCategories() {
-  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+function getUniqueCategories() {
+  const cats = ["All", ...new Set(products.map(p => p.category))];
   const select = document.getElementById("categoryFilter");
   if (!select) return;
-
-  const categories = [...new Set(products.map(p => p.category))];
-  select.innerHTML = `<option value="All">All Categories</option>` +
-    categories.map(c => `<option value="${c}">${c}</option>`).join("");
+  select.innerHTML = "";
+  cats.forEach(cat => {
+    const option = document.createElement("option");
+    option.value = cat;
+    option.textContent = cat;
+    select.appendChild(option);
+  });
 }
+
+function setupThemeToggle() {
+  const toggleBtn = document.getElementById("themeToggle");
+  const icon = document.getElementById("themeIcon");
+  const dark = localStorage.getItem("darkMode") === "true";
+
+  document.body.classList.toggle("dark", dark);
+  icon.innerText = dark ? "🌙" : "🌞";
+
+  if (toggleBtn) {
+    toggleBtn.onclick = () => {
+      const isDark = document.body.classList.toggle("dark");
+      localStorage.setItem("darkMode", isDark);
+      icon.innerText = isDark ? "🌙" : "🌞";
+    };
+  }
+}
+
+window.onload = () => {
+  renderProducts();
+  getUniqueCategories();
+  updateCartCount();
+  setupThemeToggle();
+};
