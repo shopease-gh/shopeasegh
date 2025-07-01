@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout - ShopEase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>🚚 Checkout</h2>
+  <form id="checkoutForm">
+    <input type="text" id="name" placeholder="Full Name" required><br><br>
+    <input type="tel" id="phone" placeholder="Phone Number" required><br><br>
+    <textarea id="location" placeholder="Delivery Location" required></textarea><br><br>
+    <select id="deliveryMethod">
+      <option value="Standard">Standard Delivery</option>
+      <option value="Express">Express Delivery</option>
+    </select><br><br>
+    <p><strong>Pay to MoMo Name: Magdalene NsomahAnongura</strong></p>
+    <button type="submit">Place Order</button>
+  </form>
+  <p id="checkoutMsg" style="color: green;"></p>
+
+  <script>
+    document.getElementById("checkoutForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      if (cart.length === 0) {
+        alert("Your cart is empty.");
+        return;
+      }
+
+      const order = {
+        name: document.getElementById("name").value,
+        phone: document.getElementById("phone").value,
+        location: document.getElementById("location").value,
+        method: document.getElementById("deliveryMethod").value,
+        cart: cart,
+        time: new Date().toLocaleString()
+      };
+
+      const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+      orders.push(order);
+      localStorage.setItem("orders", JSON.stringify(orders));
+      localStorage.removeItem("cart");
+
+      document.getElementById("checkoutMsg").innerText = "Order placed! Admin will contact you.";
+      document.getElementById("checkoutForm").reset();
+    });
+  </script>
+</body>
+</html>
