@@ -118,13 +118,16 @@ function toggleAdminLink() {
 
 // Filter Logic
 function applyFilters() {
-  const maxPrice = parseFloat(document.getElementById("priceFilter").value) || Infinity;
   const category = document.getElementById("categoryFilter").value;
+  const maxPrice = parseFloat(document.getElementById("maxPriceFilter").value);
+  const filtered = products.filter(product => {
+    const matchCategory = category === "All" || product.category === category;
+    const matchPrice = isNaN(maxPrice) || parseFloat(product.price) <= maxPrice;
+    return matchCategory && matchPrice;
+  });
+  renderProducts(filtered);
+}
 
-  const allProducts = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
-  const filtered = allProducts.filter(p =>
-    (category === "All" || p.category === category) && p.price <= maxPrice
-  );
 
   const container = document.getElementById("productList");
   if (!container) return;
