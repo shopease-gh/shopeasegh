@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Inbox - ShopEase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>📥 Incoming Orders</h2>
+  <div id="orderList"></div>
+
+  <script>
+    const access = prompt("Admin Code:");
+    if (access !== "entry0987") {
+      alert("Denied.");
+      location.href = "index.html";
+    }
+
+    const orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    const container = document.getElementById("orderList");
+
+    if (orders.length === 0) {
+      container.innerHTML = "<p>No new orders.</p>";
+    } else {
+      container.innerHTML = orders.map(order => `
+        <div style="border:1px solid #ccc; padding:10px; margin-bottom:10px;">
+          <strong>${order.name}</strong> (${order.phone})<br />
+          📍 ${order.location} | ${order.method}<br />
+          🕒 ${order.time}<br />
+          <strong>Items:</strong><ul>${order.cart.map(i => `<li>${i.name} - ₵${i.price}</li>`).join("")}</ul>
+          <textarea placeholder="Reply to customer (copy-paste manually)" style="width:100%;"></textarea>
+        </div>
+      `).join("");
+    }
+  </script>
+</body>
+</html>
