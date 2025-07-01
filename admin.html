@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin - ShopEase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>🛠 Admin Access</h2>
+
+  <div id="loginForm">
+    <input type="text" id="username" placeholder="Username" /><br /><br />
+    <input type="password" id="password" placeholder="Password" /><br /><br />
+    <input type="text" id="secret" placeholder="Secret Code" /><br /><br />
+    <button onclick="loginAdmin()">Login</button>
+  </div>
+
+  <div id="adminPanel" style="display: none;">
+    <h3>Welcome, Admin!</h3>
+    <button onclick="location.href='inbox.html'">📥 View Inbox</button><br /><br />
+
+    <h4>📤 Upload Product</h4>
+    <input type="text" id="pname" placeholder="Product Name" /><br /><br />
+    <input type="number" id="pprice" placeholder="Price (GHS)" /><br /><br />
+    <input type="text" id="pcategory" placeholder="Category" /><br /><br />
+    <input type="file" id="pimage" /><br /><br />
+    <button onclick="uploadProduct()">Upload</button>
+    <p id="uploadStatus"></p>
+
+    <h4>🏷 Create Promotion</h4>
+    <input type="text" id="promoText" placeholder="e.g., 10% off all skin care" /><br /><br />
+    <button onclick="savePromo()">Save Promotion</button>
+    <p id="promoStatus"></p>
+  </div>
+
+  <script>
+    let attempts = 0;
+
+    function loginAdmin() {
+      const user = document.getElementById("username").value;
+      const pass = document.getElementById("password").value;
+      const code = document.getElementById("secret").value;
+
+      if (user === "adminsomah" && pass === "jacenorman07" && code === "0987") {
+        document.getElementById("loginForm").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+      } else {
+        attempts++;
+        alert("Incorrect credentials.");
+        if (attempts >= 3) {
+          alert("Too many failed attempts. Try again later.");
+          document.getElementById("loginForm").innerHTML = "<p>Access temporarily disabled.</p>";
+        }
+      }
+    }
+
+    function uploadProduct() {
+      const name = document.getElementById("pname").value;
+      const price = document.getElementById("pprice").value;
+      const category = document.getElementById("pcategory").value;
+      const file = document.getElementById("pimage").files[0];
+
+      const reader = new FileReader();
+      reader.onload = function () {
+        const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+        products.push({ name, price, category, image: reader.result });
+        localStorage.setItem("uploadedProducts", JSON.stringify(products));
+        document.getElementById("uploadStatus").innerText = "Product uploaded!";
+      };
+
+      if (file) {
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function savePromo() {
+      const promo = document.getElementById("promoText").value;
+      localStorage.setItem("promoText", promo);
+      document.getElementById("promoStatus").innerText = "Promotion saved!";
+    }
+  </script>
+</body>
+</html>
