@@ -96,6 +96,72 @@
 
     function savePromo() {
       const promo = document.getElementById("promoText").value;
+      <script>
+function loadPromoOptions() {
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+  const dropdown = document.getElementById("promoProduct");
+  const removeDropdown = document.getElementById("removePromoProduct");
+  dropdown.innerHTML = "";
+  removeDropdown.innerHTML = "";
+  products.forEach(p => {
+    dropdown.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+    removeDropdown.innerHTML += `<option value="${p.id}">${p.name}</option>`;
+  });
+}
+
+document.getElementById("promoForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+  const id = document.getElementById("promoProduct").value;
+  const discount = parseFloat(document.getElementById("discountValue").value);
+  const type = document.getElementById("discountType").value;
+  const isPromo = document.getElementById("isPromo").checked;
+
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+  const index = products.findIndex(p => p.id == id);
+  if (index !== -1) {
+    const product = products[index];
+    product.originalPrice = product.originalPrice || product.price;
+    if (type === "percent") {
+      product.price = product.originalPrice - (product.originalPrice * discount / 100);
+    } else {
+      product.price = product.originalPrice - discount;
+    }
+    product.discountApplied = true;
+    product.promo = isPromo;
+    products[index] = product;
+    localStorage.setItem("uploadedProducts", JSON.stringify(products));
+    document.getElementById("promoStatus").innerText = "Discount applied successfully!";
+    loadPromoOptions();
+  }
+});
+
+function removeDiscount() {
+  const id = document.getElementById("removePromoProduct").value;
+  const products = JSON.parse(localStorage.getItem("uploadedProducts") || "[]");
+  const index = products.findIndex(p => p.id == id);
+  if (index !== -1) {
+    const product = products[index];
+    product.price = product.originalPrice || product.price;
+    delete product.originalPrice;
+    delete product.discountApplied;
+    delete product.promo;
+    products[index] = product;
+    localStorage.setItem("uploadedProducts", JSON.stringify(products));
+    document.getElementById("promoStatus").innerText = "Discount removed!";
+    loadPromoOptions();
+  }
+}
+
+window.onload = function () {
+  if (prompt("Enter admin access code:") !== "entry0987") {
+    alert("Access denied.");
+    location.href = "index.html";
+  } else {
+    loadPromoOptions();
+  }
+}
+</script>
+
       localStorage.setItem("promoText", promo);
       document.getElementById("promoStatus").innerText = "Promotion saved!";
     }
