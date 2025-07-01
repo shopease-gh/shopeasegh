@@ -2,26 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ShopEase - Home</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+  <div class="sidebar" id="sidebar">
+    <a href="index.html">🏠 Home</a>
+    <a href="cart.html">🛒 Cart</a>
+    <a href="wishlist.html">❤️ Wishlist</a>
+    <a href="inbox.html">📩 Inbox</a>
+    <a href="login.html">🔐 Login</a>
+    <a href="admin.html" id="adminLink" style="display: none;">🛠️ Admin</a>
+  </div>
+
   <header>
+    <button id="sidebarToggle">☰</button>
     <div class="logo">SE</div>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="cart.html">Cart 🛒 (<span id="cartCount">0</span>)</a>
-      <a href="wishlist.html">Wishlist ❤️</a>
-      <a href="inbox.html">Inbox 📩</a>
-      <a href="login.html">Login</a>
-    </nav>
-    <button id="themeToggle"><span id="themeIcon">🌞</span></button>
+    <div class="topbar-right">
+      <span>🛒 (<span id="cartCount">0</span>)</span>
+      <button id="themeToggle"><span id="themeIcon">🌞</span></button>
+    </div>
   </header>
 
   <main>
     <h1>ShopEase Products</h1>
-
     <div class="filters">
       <label>Category:</label>
       <select id="categoryFilter">
