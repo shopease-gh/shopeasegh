@@ -32,6 +32,27 @@
     <button onclick="savePromo()">Save Promotion</button>
     <p id="promoStatus"></p>
   </div>
+<div id="promoPanel" style="margin-top: 30px;">
+  <h2>Manage Discounts & Promotions</h2>
+  <form id="promoForm">
+    <select id="promoProduct"></select><br><br>
+    <input type="number" id="discountValue" placeholder="Discount Value (e.g. 10)" required><br><br>
+    <select id="discountType">
+      <option value="percent">Percent (%)</option>
+      <option value="flat">Flat (₵)</option>
+    </select><br><br>
+    <label><input type="checkbox" id="isPromo"> Feature as Promo</label><br><br>
+    <button type="submit">Apply Discount</button>
+  </form>
+
+  <div style="margin-top: 20px;">
+    <h4>Remove Discount</h4>
+    <select id="removePromoProduct"></select><br><br>
+    <button onclick="removeDiscount()">Remove Discount</button>
+  </div>
+
+  <p id="promoStatus" style="color: green; margin-top: 10px;"></p>
+</div>
 
   <script>
     let attempts = 0;
