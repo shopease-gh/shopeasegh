@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Wishlist - ShopEase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>❤️ Wishlist</h2>
+  <div id="wishlistItems"></div>
+
+  <script>
+    function renderWishlist() {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      const container = document.getElementById("wishlistItems");
+      if (wishlist.length === 0) {
+        container.innerHTML = "<p>No items in wishlist.</p>";
+        return;
+      }
+
+      container.innerHTML = wishlist.map((item, index) => `
+        <div style="border: 1px solid #ccc; margin-bottom: 10px; padding: 10px;">
+          <strong>${item.name}</strong><br />
+          ₵${item.price}<br />
+          <button onclick="removeWishlistItem(${index})">Remove</button>
+        </div>
+      `).join("");
+    }
+
+    function removeWishlistItem(index) {
+      const wishlist = JSON.parse(localStorage.getItem("wishlist") || "[]");
+      wishlist.splice(index, 1);
+      localStorage.setItem("wishlist", JSON.stringify(wishlist));
+      renderWishlist();
+    }
+
+    renderWishlist();
+  </script>
+</body>
+</html>
