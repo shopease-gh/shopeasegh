@@ -44,6 +44,31 @@
       </section>
     </main>
   </div>
+  <div class="topbar">
+  <span>Welcome to ShopEase!</span>
+  <div>
+    <span id="userGreeting"></span>
+    <a href="login.html" id="loginBtn">Login</a>
+    <a href="register.html" id="registerBtn">Register</a>
+    <a href="#" id="logoutBtn" style="display: none;">Logout</a>
+  </div>
+</div>
+
+<script>
+  const user = JSON.parse(localStorage.getItem("loggedInUser"));
+  if (user) {
+    document.getElementById("userGreeting").textContent = `Hi, ${user.name}!`;
+    document.getElementById("loginBtn").style.display = "none";
+    document.getElementById("registerBtn").style.display = "none";
+    document.getElementById("logoutBtn").style.display = "inline";
+  }
+
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.removeItem("loggedInUser");
+    window.location.reload();
+  });
+</script>
+
 
   <footer>
     <p>&copy; 2025 ShopEase — Beauty. Tech. You.</p>
