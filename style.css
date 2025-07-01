@@ -31,6 +31,24 @@ body {
   display: flex;
   flex-direction: column;
 }
+body.dark {
+  background-color: #111;
+  color: #f9f9f9;
+}
+
+body.dark .product-card {
+  background: #222;
+  border-color: gold;
+}
+
+.product-card {
+  background: white;
+  padding: 15px;
+  border: 1px solid #ccc;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
 
 /* Layout */
 .app-container {
