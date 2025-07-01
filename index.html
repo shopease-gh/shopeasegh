@@ -1,0 +1,54 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ShopEase | Beauty. Tech. You.</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <h1 class="logo">SE</h1>
+      <nav>
+        <a href="index.html">Home</a>
+        <a href="cart.html">Cart 🛒</a>
+        <a href="wishlist.html">Wishlist ❤️</a>
+        <a href="inbox.html">Inbox 📩</a>
+        <a href="admin.html" id="adminLink" style="display: none;">Admin</a>
+        <a href="#" id="loginToggle">Login</a>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Filters -->
+      <div class="topbar">
+        <select id="categoryFilter">
+          <option value="All">All Categories</option>
+        </select>
+        <input type="number" id="priceFilter" placeholder="Max Price (GHS)" />
+        <button onclick="applyFilters()">Filter</button>
+        <div class="theme-toggle">
+          <label>🌞</label>
+          <input type="checkbox" id="themeSwitch" />
+          <label>🌙</label>
+        </div>
+      </div>
+
+      <!-- Products Area -->
+      <section id="productList" class="product-grid">
+        <!-- Products inserted dynamically -->
+      </section>
+    </main>
+  </div>
+
+  <footer>
+    <p>&copy; 2025 ShopEase — Beauty. Tech. You.</p>
+  </footer>
+
+  <script src="main.js"></script>
+</body>
+</html>
