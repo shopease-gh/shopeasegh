@@ -38,7 +38,12 @@ function renderProducts(filtered = null) {
     <div class="product-card">
       <img src="${prod.image}" alt="${prod.name}" />
       <h3>${prod.name}</h3>
-      <p>₵${prod.price}</p>
+      ${
+  prod.discountApplied
+    ? `<p><s>₵${prod.originalPrice}</s> <strong>₵${prod.price}</strong> <span class="promo-badge">🔥 Promo</span></p>`
+    : `<p><strong>₵${prod.price}</strong></p>`
+}
+
       <button>Add to Cart</button>
       <button>❤️ Wishlist</button>
     </div>
