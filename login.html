@@ -2,39 +2,31 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Login - ShopEase</title>
+  <title>Login | ShopEase</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <a href="login.html">Login</a>
-
-  <div class="auth-container">
-    <h2>Login to ShopEase</h2>
-    <form id="loginForm">
-      <input type="email" id="loginEmail" placeholder="Email" required /><br />
-      <input type="password" id="loginPassword" placeholder="Password" required /><br />
+  <main style="text-align:center; margin-top: 50px;">
+    <h1>Login</h1>
+    <form onsubmit="return loginUser()">
+      <input type="text" id="username" placeholder="Username" required><br><br>
+      <input type="password" id="password" placeholder="Password" required><br><br>
       <button type="submit">Login</button>
-      <p>Don't have an account? <a href="register.html">Register here</a></p>
     </form>
-  </div>
+  </main>
 
   <script>
-    document.getElementById("loginForm").addEventListener("submit", function(e) {
-      e.preventDefault();
-      const email = document.getElementById("loginEmail").value;
-      const password = document.getElementById("loginPassword").value;
-
-      const users = JSON.parse(localStorage.getItem("users") || "[]");
-      const match = users.find(u => u.email === email && u.password === password);
-
-      if (match) {
-        localStorage.setItem("loggedInUser", JSON.stringify(match));
-        alert("Login successful!");
-        window.location.href = "index.html";
+    function loginUser() {
+      const username = document.getElementById("username").value;
+      const password = document.getElementById("password").value;
+      if (username === "adminsomah" && password === "jacenorman07") {
+        alert("Admin login successful!");
+        window.location.href = "admin.html";
       } else {
-        alert("Invalid credentials.");
+        alert("Incorrect credentials.");
       }
-    });
+      return false;
+    }
   </script>
 </body>
 </html>
