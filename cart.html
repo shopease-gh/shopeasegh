@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Your Cart - ShopEase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <h2>🛒 Your Cart</h2>
+  <div id="cartItems"></div>
+  <div id="total" style="margin-top: 15px; font-weight: bold;"></div>
+  <br />
+  <a href="checkout.html"><button>Proceed to Checkout</button></a>
+
+  <script>
+    function renderCart() {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      const container = document.getElementById("cartItems");
+      if (cart.length === 0) {
+        container.innerHTML = "<p>Your cart is empty.</p>";
+        return;
+      }
+
+      let total = 0;
+      container.innerHTML = cart.map((item, index) => {
+        total += parseFloat(item.price);
+        return `
+          <div style="border-bottom: 1px solid #ccc; padding: 10px;">
+            <strong>${item.name}</strong><br />
+            ₵${item.price}<br />
+            <button onclick="removeItem(${index})">Remove</button>
+          </div>
+        `;
+      }).join("");
+
+      document.getElementById("total").innerText = `Total: ₵${total.toFixed(2)}`;
+    }
+
+    function removeItem(index) {
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      cart.splice(index, 1);
+      localStorage.setItem("cart", JSON.stringify(cart));
+      renderCart();
+    }
+
+    renderCart();
+  </script>
+</body>
+</html>
